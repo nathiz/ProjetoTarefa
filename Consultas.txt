@@ -1,0 +1,9 @@
+Consultas 
+https://mmarcosab.medium.com/usando-anota%C3%A7%C3%B5es-do-lombok-em-java-com-springboot-ecbec69234a9
+https://cursos.alura.com.br/forum/topico-pegar-valor-do-enum-no-scanner-253871
+https://www.dio.me/articles/junit-e-mockito
+https://www.treinaweb.com.br/blog/documentando-uma-api-spring-boot-com-o-swagger
+https://web.dio.me/course/d2758af9-3b5d-49e2-9ec8-c6fd150d623c/learning/731af7fe-4f2e-4d66-86db-5af62b9a8d57?autoplay=1
+https://www.treinaweb.com.br/blog/documentando-uma-api-spring-boot-com-o-swagger
+https://springdoc.org/
+https://github.com/digitalinnovationone/dio-springboot
