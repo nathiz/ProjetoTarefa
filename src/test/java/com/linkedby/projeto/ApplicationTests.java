@@ -1,8 +1,7 @@
 package com.linkedby.projeto;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.time.LocalDateTime;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +11,8 @@ import com.linkedby.projeto.model.Status;
 import com.linkedby.projeto.model.Tarefas;
 import com.linkedby.projeto.service.TarefasService;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @SpringBootTest
 class ApplicationTests {
 
@@ -19,60 +20,48 @@ class ApplicationTests {
     private TarefasService tarefasService;
 
     @Test
-    void criarTarefaComSucesso() {
-        Tarefas novaTarefa = Tarefas.builder()
-            .titulo("Título de teste")
-            .descricao("Descrição de teste")
-            .status(Status.PENDENTE)
-            .dataCriacao(LocalDateTime.now())
-            .build();
+    void deveCriarTarefa() {
+        Tarefas tarefa = Tarefas.builder()
+                .titulo("Estudar Spring")
+                .descricao("Ler documentação oficial")
+                .status(Status.PENDENTE)
+                .build();
 
-        Tarefas salva = tarefasService.criar(novaTarefa);
+        Tarefas salva = tarefasService.criar(tarefa);
 
-        assertNotNull(salva.getId(), "ID da tarefa não deve ser nulo");
-        System.out.println("Tarefa salva com ID: " + salva.getId());
+        assertThat(salva.getId()).isNotNull();
+        assertThat(salva.getTitulo()).isEqualTo("Estudar Spring");
     }
 
     @Test
-    void alterarTarefaComSucesso() {
-        Tarefas novaTarefa = Tarefas.builder()
-            .titulo("Título de teste2")
-            .descricao("Descrição de teste2")
-            .status(Status.PENDENTE)
-            .dataCriacao(LocalDateTime.now())
-            .build();
+    void deveAtualizarTarefa() {
+        Tarefas tarefa = Tarefas.builder()
+                .titulo("Estudar Spring")
+                .descricao("Inicial")
+                .status(Status.PENDENTE)
+                .build();
 
-        Tarefas salva = tarefasService.criar(novaTarefa);
-
-        assertNotNull(salva.getId(), "ID da tarefa não deve ser nulo");
-        System.out.println("Tarefa salva com ID: " + salva.getId());
-
-        // Alterar a tarefa
-        salva.setTitulo("Título alterado");
-        salva.setDescricao("Descrição alterada");
+        Tarefas salva = tarefasService.criar(tarefa);
+        salva.setDescricao("Atualizada");
 
         Tarefas atualizada = tarefasService.atualizar(salva.getId(), salva);
 
-        assertEquals("Título alterado", atualizada.getTitulo());
-        assertEquals("Descrição alterada", atualizada.getDescricao());
+        assertThat(atualizada.getDescricao()).isEqualTo("Atualizada");
     }
 
     @Test
-    void deletarTarefaComSucesso() {
-        Tarefas novaTarefa = Tarefas.builder()
-            .titulo("Título de teste3")
-            .descricao("Descrição de teste3")
-            .status(Status.PENDENTE)
-            .dataCriacao(LocalDateTime.now())
-            .build();
+    void deveExcluirTarefa() {
+        Tarefas tarefa = Tarefas.builder()
+                .titulo("Deletar Tarefa")
+                .descricao("Será excluída")
+                .status(Status.PENDENTE)
+                .build();
 
-        Tarefas salva = tarefasService.criar(novaTarefa);
-
-        assertNotNull(salva.getId(), "ID da tarefa não deve ser nulo");
-        System.out.println("Tarefa salva com ID: " + salva.getId());
-
-		//Deletar a tarefa
+        Tarefas salva = tarefasService.criar(tarefa);
         tarefasService.deletar(salva.getId());
 
+        assertThrows(EntityNotFoundException.class, () -> {
+            tarefasService.buscarPorId(salva.getId());
+        });
     }
 }

@@ -44,5 +44,5 @@ public class Tarefas {
     private Status status;
 
     @Column(name = "datacriacao")
-    private LocalDateTime dataCriacao;
+    private LocalDateTime dataCriacao = LocalDateTime.now();
 }
